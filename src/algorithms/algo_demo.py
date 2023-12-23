@@ -55,6 +55,7 @@ def vectorSub(a, b):
 def vectorMul(a, b):
     return Vector(a.x * b, a.y * b)
 
+
 # Crossword Puzzle
 
 
@@ -92,7 +93,14 @@ class CrossWordPuzzle:
         pos = Vector(pos_to_match.x, pos_to_match.y)
         pos.add(vectorMul(delta, -offset))
 
+        # check if first letter matches
         if pos in self.grid and self.grid[pos] != word[0]:
+            return False, []
+
+        # check if previous space is empty
+        prev_pos = Vector(pos.x, pos.y)
+        prev_pos.add(vectorMul(delta, -1))
+        if prev_pos in self.grid:
             return False, []
 
         current_pos = Vector(pos.x, pos.y)
@@ -107,8 +115,9 @@ class CrossWordPuzzle:
 
             current_pos.add(delta)
 
-        # check next step is inside grid
-        if self.grid.get(current_pos) is not None:
+        # check if next space is empty
+        next_pos = Vector(current_pos.x, current_pos.y)
+        if next_pos in self.grid:
             return False, written_positions
 
         return True, written_positions
@@ -118,19 +127,13 @@ class CrossWordPuzzle:
             return [Vector(0, 0)]
 
         positions = []
-        average_position = Vector(0, 0)
-        count = 0
 
         for position, letter in self.grid.items():
             if letter == char:
-                positions.append(Vector(position.x, position.y))
-                average_position.add(position)
-                count += 1
+                positions.append(position)
 
-        if (count == 0):
+        if (len(positions) == 0):
             return []
-
-        average_position.div(count)
 
         # Ideas:
         # sort by distance from center to encourage symmetry
@@ -139,9 +142,26 @@ class CrossWordPuzzle:
         #
 
         # sort by distance from average position, smallest to largest
-        positions.sort(
-            key=lambda pos: vectorSub(pos, average_position).magSq()
-        )
+        def getAveragePosition(positions):
+            result = Vector(0, 0)
+            for position in positions:
+                result.add(position)
+            result.div(len(positions))
+            return result
+
+        def getMaxDistanceSq(positions, average):
+            result = 0
+            for position in positions:
+                result = max(result, vectorSub(position, average).magSq())
+            return result
+
+        average = getAveragePosition(positions)
+        max_distance_sq = getMaxDistanceSq(positions, average)
+
+        def distanceFromAverage01(position):
+            return vectorSub(position, average).magSq() / (max_distance_sq + 1)
+
+        positions.sort(key=distanceFromAverage01)
 
         return positions
 
@@ -179,6 +199,8 @@ def createCrosswordHelper(puzzle, rows, cols, index) -> Generator[CrossWordPuzzl
 
 def createCrossword(words):
     puzzle = CrossWordPuzzle()
+
+    words.sort(key=lambda word: len(word), reverse=True)
 
     for word in words:
         puzzle.dictionary.append(word)

@@ -13,10 +13,3 @@ export function orientationToDelta(orientation: Orientation): Vector {
       return new Vector(0, 1);
   }
 }
-
-export interface Word {
-  word: string;
-  row_start: number;
-  col_start: number;
-  orientation: Orientation;
-}
