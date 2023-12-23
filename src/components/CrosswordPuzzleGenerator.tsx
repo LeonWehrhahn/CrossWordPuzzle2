@@ -13,18 +13,17 @@ import ReactToPrint, { useReactToPrint } from "react-to-print";
 
 export default function CrosswordPuzzleGenerator({
   questions,
+  solutionWord,
   box_width,
 }: {
   questions: QuestionAnswer[];
+  solutionWord: string;
   box_width: number;
 }) {
   const [currentCrossword, setCurrentCrossword] = useState<
     CrossWordPuzzle | undefined | null
   >(undefined);
   const [showSolution, setShowSolution] = useState(false);
-
-  const [keepProceedingTimer, setKeepProceedingTimer] =
-    useState<NodeJS.Timeout>();
 
   const [atleastOneSolution, setAtleastOneSolution] = useState(false);
 
@@ -86,18 +85,6 @@ export default function CrosswordPuzzleGenerator({
             <button
               className="bg-green-500 hover:bg-green-600 my-4 text-white font-bold py-2 px-4 rounded-lg shadow-md"
               onClick={() => proceedToNextCrossword()}
-              onMouseDown={(e) => {
-                setKeepProceedingTimer(
-                  setInterval(() => {
-                    proceedToNextCrossword();
-                  }, 100)
-                );
-              }}
-              onMouseLeave={(e) => {
-                if (keepProceedingTimer) {
-                  clearInterval(keepProceedingTimer);
-                }
-              }}
             >
               Regenerate Crossword
             </button>
@@ -119,6 +106,7 @@ export default function CrosswordPuzzleGenerator({
           <div ref={componentRef}>
             <Grid
               crossword={currentCrossword}
+              solutionWord={solutionWord}
               showSolution={showSolution}
               box_width={box_width}
             />

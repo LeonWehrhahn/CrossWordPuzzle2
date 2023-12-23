@@ -5,9 +5,13 @@ import EditableTable from "./EditableTable";
 export default function QuestionAnswerInputBox({
   questions,
   setQuestions,
+  solutionWord,
+  setSolutionWord,
 }: {
   questions: QuestionAnswer[];
   setQuestions: React.Dispatch<React.SetStateAction<QuestionAnswer[]>>;
+  solutionWord: string;
+  setSolutionWord: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [question, setQuestion] = React.useState("");
   const [answer, setAnswer] = React.useState("");
@@ -47,6 +51,17 @@ export default function QuestionAnswerInputBox({
       </div>
 
       <EditableTable questions={questions} setQuestions={setQuestions} />
+
+      <div className="flex items-center justify-center my-4">
+        <span className="mr-4 font-semibold"> Solution Word: </span>
+        <input
+          type="text"
+          className="p-2 rounded-lg shadow-md"
+          placeholder="Solution Word"
+          value={solutionWord}
+          onChange={(e) => setSolutionWord(e.target.value)}
+        />
+      </div>
     </div>
   );
 }

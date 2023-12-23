@@ -26,6 +26,8 @@ export default function Home() {
     },
   ]);
 
+  const [solutionWord, setSolutionWord] = useState<string>("");
+
   const [box_width, setBoxWidth] = useState(40);
 
   return (
@@ -41,6 +43,8 @@ export default function Home() {
         <QuestionAnswerInputBox
           questions={questions}
           setQuestions={setQuestions}
+          solutionWord={solutionWord}
+          setSolutionWord={setSolutionWord}
         />
 
         {questions.length === 0 && (
@@ -53,6 +57,7 @@ export default function Home() {
           <>
             <CrosswordPuzzleGenerator
               questions={questions}
+              solutionWord={solutionWord}
               box_width={box_width}
             />
 
