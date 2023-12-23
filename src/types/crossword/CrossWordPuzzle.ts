@@ -5,7 +5,7 @@ import { QuestionAnswer } from "../questions/QuestionAnswer";
 
 export class CrossWordPuzzle {
   grid: HashableMap<Vector, string>;
-  word_starts: HashableMap<Vector, [Orientation, number]>;
+  word_starts: HashableMap<Vector, [Orientation, number][]>;
   questions: QuestionAnswer[];
 
   sorted_questions: QuestionAnswer[];
@@ -13,7 +13,7 @@ export class CrossWordPuzzle {
   constructor(
     grid: HashableMap<Vector, string>,
     questions: QuestionAnswer[],
-    word_starts: HashableMap<Vector, [Orientation, number]>
+    word_starts: HashableMap<Vector, [Orientation, number][]>
   ) {
     this.grid = grid;
     this.word_starts = word_starts;
@@ -117,7 +117,7 @@ export class CrossWordPuzzle {
 
   toFiniteGrid(): [
     (string | null)[][],
-    HashableMap<Vector, [Orientation, number]>
+    HashableMap<Vector, [Orientation, number][]>
   ] {
     const min_x = Math.min(...Array.from(this.grid.keys()).map((v) => v.x));
     const max_x = Math.max(...Array.from(this.grid.keys()).map((v) => v.x));
@@ -125,7 +125,7 @@ export class CrossWordPuzzle {
     const max_y = Math.max(...Array.from(this.grid.keys()).map((v) => v.y));
 
     const grid: (string | null)[][] = [];
-    const word_starts: HashableMap<Vector, [Orientation, number]> =
+    const word_starts: HashableMap<Vector, [Orientation, number][]> =
       new HashableMap();
 
     for (let y = min_y; y <= max_y; y++) {
@@ -140,9 +140,15 @@ export class CrossWordPuzzle {
       }
     }
 
-    for (const [position, [orientation, index]] of this.word_starts.entries()) {
+    for (const [position, starts] of this.word_starts.entries()) {
       const new_pos = new Vector(position.x - min_x, position.y - min_y);
-      word_starts.set(new_pos, [orientation, index]);
+      if (!word_starts.has(new_pos)) {
+        word_starts.set(new_pos, []);
+
+        for (const [orientation, index] of starts) {
+          word_starts.get(new_pos)!.push([orientation, index]);
+        }
+      }
     }
 
     return [grid, word_starts];
@@ -155,8 +161,10 @@ export class CrossWordPuzzle {
       .map((row) => row.map((letter) => (letter ? letter : " ")).join(""))
       .join("\n");
 
-    for (const [position, [orientation, index]] of word_starts.entries()) {
-      result += `\n${position.x},${position.y} ${orientation} ${this.questions[index]}`;
+    for (const [position, starts] of word_starts.entries()) {
+      for (const [orientation, index] of starts) {
+        result += `\n${position.x},${position.y} ${orientation} ${this.questions[index]}`;
+      }
     }
 
     return result;
@@ -168,12 +176,9 @@ export class CrossWordPuzzle {
       new_grid.set(new Vector(position.x, position.y), letter);
     }
 
-    const new_word_starts = new HashableMap<Vector, [Orientation, number]>();
-    for (const [position, [orientation, index]] of this.word_starts.entries()) {
-      new_word_starts.set(new Vector(position.x, position.y), [
-        orientation,
-        index,
-      ]);
+    const new_word_starts = new HashableMap<Vector, [Orientation, number][]>();
+    for (const [position, starts] of this.word_starts.entries()) {
+      new_word_starts.set(new Vector(position.x, position.y), [...starts]);
     }
 
     return new CrossWordPuzzle(new_grid, [...this.questions], new_word_starts);

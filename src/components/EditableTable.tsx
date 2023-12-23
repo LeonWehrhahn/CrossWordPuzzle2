@@ -35,15 +35,15 @@ export default function EditableTable({
             <td className="py-2 px-4">
               <textarea
                 className="outline-none resize-none w-full bg-transparent"
+                placeholder="Question"
+                value={question.question}
                 contentEditable
                 onChange={(e) => {
                   const newQuestions = [...questions];
                   newQuestions[i].question = e.target.value;
                   setQuestions(newQuestions);
                 }}
-              >
-                {question.question}
-              </textarea>
+              />
             </td>
             <td className="py-2 px-4">
               <textarea

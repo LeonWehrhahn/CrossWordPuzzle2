@@ -15,30 +15,36 @@ function Block({
 }: {
   letter: string;
   pos: Vector;
-  word_starts: HashableMap<Vector, [Orientation, number]>;
+  word_starts: HashableMap<Vector, [Orientation, number][]>;
   showSolution: boolean;
 }) {
-  let question_index = undefined;
-  let orientation = undefined;
+  let starts: [Orientation, number][] = [];
 
   if (word_starts.has(pos)) {
-    const [orientation_, question_index_] = word_starts.get(pos)!;
-    question_index = question_index_;
-    orientation = orientation_;
+    starts = word_starts.get(pos)!;
   }
 
   return (
     <div className="w-full h-full border-gray-800 border-2 flex justify-center items-center border-r-4 border-b-4 relative">
-      {question_index !== undefined && (
+      <>
         <span className="absolute top-0 left-0 text-xs px-1 text-gray-600">
-          {question_index + 1}
+          {starts.map(([orientation, index]) => (
+            <span key={orientationToString(orientation) + "," + index}>
+              {index + 1}
+              <br />
+            </span>
+          ))}
         </span>
-      )}
-      {orientation !== undefined && (
+
         <span className="absolute top-0 right-0 text-xs px-1 text-gray-600">
-          {orientationToString(orientation)}
+          {starts.map(([orientation, index]) => (
+            <span key={orientationToString(orientation) + "," + index}>
+              {orientationToString(orientation)}
+              <br />
+            </span>
+          ))}
         </span>
-      )}
+      </>
 
       {showSolution && (
         <span className="text-2x font-bold text-black">{letter}</span>

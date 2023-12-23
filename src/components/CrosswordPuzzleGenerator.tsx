@@ -18,23 +18,33 @@ export default function CrosswordPuzzleGenerator({
   questions: QuestionAnswer[];
   box_width: number;
 }) {
-  const [currentCrossword, setCurrentCrossword] = useState<CrossWordPuzzle>();
+  const [currentCrossword, setCurrentCrossword] = useState<
+    CrossWordPuzzle | undefined | null
+  >(undefined);
   const [showSolution, setShowSolution] = useState(false);
+
+  const [keepProceedingTimer, setKeepProceedingTimer] =
+    useState<NodeJS.Timeout>();
+
+  const [atleastOneSolution, setAtleastOneSolution] = useState(false);
 
   const crosswords = useMemo(() => {
     return crosswordIterator(questions);
   }, [questions]);
 
   const proceedToNextCrossword = () => {
-    setCurrentCrossword(crosswords.next().value?.clone());
+    let next = crosswords.next().value;
+    if (!next) {
+      setCurrentCrossword(null);
+    } else {
+      setAtleastOneSolution(true);
+      setCurrentCrossword(next.clone());
+    }
   };
 
   useEffect(() => {
-    console.log(questions);
-  }, [questions]);
-
-  useEffect(() => {
     proceedToNextCrossword();
+    setAtleastOneSolution(false);
   }, [questions]);
 
   let componentRef = useRef(null);
@@ -48,9 +58,26 @@ export default function CrosswordPuzzleGenerator({
 
   return (
     <div className="flex flex-col items-center my-10 w-full">
-      {!currentCrossword && (
+      {currentCrossword === undefined && (
         <div>
-          <h1> It is not possible to generate such a crossword puzzle </h1>
+          <h1> Generating Crossword Puzzle... </h1>
+        </div>
+      )}
+      {currentCrossword === null && (
+        <div>
+          {atleastOneSolution && (
+            <>
+              <h1 className="text-xl">
+                No more Crossword Puzzles possible with these answers!{" "}
+              </h1>
+              <p> Try changing the questions and answers. </p>
+            </>
+          )}
+          {!atleastOneSolution && (
+            <h1 className="text-xl">
+              No Crossword Puzzle possible with these answers!{" "}
+            </h1>
+          )}
         </div>
       )}
       {currentCrossword && (
@@ -58,7 +85,19 @@ export default function CrosswordPuzzleGenerator({
           <div className="flex flex-row gap-4">
             <button
               className="bg-green-500 hover:bg-green-600 my-4 text-white font-bold py-2 px-4 rounded-lg shadow-md"
-              onClick={proceedToNextCrossword}
+              onClick={() => proceedToNextCrossword()}
+              onMouseDown={(e) => {
+                setKeepProceedingTimer(
+                  setInterval(() => {
+                    proceedToNextCrossword();
+                  }, 100)
+                );
+              }}
+              onMouseLeave={(e) => {
+                if (keepProceedingTimer) {
+                  clearInterval(keepProceedingTimer);
+                }
+              }}
             >
               Regenerate Crossword
             </button>
@@ -83,6 +122,9 @@ export default function CrosswordPuzzleGenerator({
               showSolution={showSolution}
               box_width={box_width}
             />
+
+            {/* force page break when printing */}
+            <div className="break-after-page" />
 
             <QuestionBox
               crossword={currentCrossword}

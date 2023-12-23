@@ -53,9 +53,15 @@ function* createCrosswordHelper(
 
         // recurse if successful
         if (success) {
-          puzzle.word_starts.set(start_pos, [orientation, index]);
+          if (!puzzle.word_starts.has(start_pos)) {
+            puzzle.word_starts.set(start_pos, []);
+          }
+
+          puzzle.word_starts.get(start_pos)!.push([orientation, index]);
+
           yield* createCrosswordHelper(puzzle, index + 1);
-          puzzle.word_starts.delete(start_pos);
+
+          puzzle.word_starts.get(start_pos)!.pop();
         }
 
         // backtrack
