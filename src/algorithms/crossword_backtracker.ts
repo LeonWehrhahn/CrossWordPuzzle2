@@ -1,10 +1,10 @@
-import { Orientation, orientationToDelta } from "@/types/crossword/Orientation";
+import { Orientation } from "@/types/crossword/Orientation";
 import { CrossWordPuzzle } from "../types/crossword/CrossWordPuzzle";
 
-import { Vector, vectorSub } from "@/types/crossword/Vector";
 import { HashableMap } from "@/types/HashableMap";
 import { QuestionAnswer } from "@/types/questions/QuestionAnswer";
 
+// Creates an iterator that yields all possible crosswords for the given questions
 export function* crosswordIterator(
   questions: QuestionAnswer[]
 ): IterableIterator<CrossWordPuzzle> {
@@ -24,6 +24,7 @@ export function* crosswordIterator(
   yield* createCrosswordHelper(puzzle, 0);
 }
 
+// Helper function for crosswordIterator that recursively creates crosswords
 function* createCrosswordHelper(
   puzzle: CrossWordPuzzle,
   index: number
