@@ -1,15 +1,12 @@
 "use client";
 
 import { crosswordIterator } from "@/algorithms/crossword_backtracker";
-import { HashableMap } from "@/types/HashableMap";
 import { CrossWordPuzzle } from "@/types/crossword/CrossWordPuzzle";
-import { Orientation } from "@/types/crossword/Orientation";
-import { Vector } from "@/types/crossword/Vector";
 import { QuestionAnswer } from "@/types/questions/QuestionAnswer";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Grid from "./Grid";
 import QuestionBox from "./QuestionBox";
-import ReactToPrint, { useReactToPrint } from "react-to-print";
+import { useReactToPrint } from "react-to-print";
 
 export default function CrosswordPuzzleGenerator({
   questions,

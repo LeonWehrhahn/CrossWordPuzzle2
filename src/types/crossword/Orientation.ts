@@ -5,6 +5,7 @@ export enum Orientation {
   VERTICAL = "vertical",
 }
 
+// Returns the delta vector for the given orientation
 export function orientationToDelta(orientation: Orientation): Vector {
   switch (orientation) {
     case Orientation.HORIZONTAL:
@@ -14,6 +15,7 @@ export function orientationToDelta(orientation: Orientation): Vector {
   }
 }
 
+// Returns the String representation of the given orientation
 export function orientationToString(orientation: Orientation): string {
   switch (orientation) {
     case Orientation.HORIZONTAL:

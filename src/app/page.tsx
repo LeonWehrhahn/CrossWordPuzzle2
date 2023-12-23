@@ -4,7 +4,7 @@ import CrosswordPuzzleGenerator from "@/components/CrosswordPuzzleGenerator";
 import QuestionAnswerInputBox from "@/components/QuestionAnswerInputBox";
 import Settings from "@/components/Settings";
 import { QuestionAnswer } from "@/types/questions/QuestionAnswer";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Home() {
   const [questions, setQuestions] = useState<QuestionAnswer[]>([
@@ -26,7 +26,7 @@ export default function Home() {
     },
   ]);
 
-  const [solutionWord, setSolutionWord] = useState<string>("");
+  const [solutionWord, setSolutionWord] = useState<string>("Leon");
 
   const [box_width, setBoxWidth] = useState(40);
 

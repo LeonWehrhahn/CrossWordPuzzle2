@@ -7,6 +7,7 @@ import {
 import { Vector } from "@/types/crossword/Vector";
 import React from "react";
 
+// A seeded random number generator used for creating predictable random numbers
 function cyrb128(str: string) {
   let h1 = 1779033703,
     h2 = 3144134277,
@@ -27,6 +28,7 @@ function cyrb128(str: string) {
   return [h1 >>> 0, h2 >>> 0, h3 >>> 0, h4 >>> 0];
 }
 
+// A seeded random number generator used for creating predictable random numbers
 function sfc32(a: number, b: number, c: number, d: number) {
   return function () {
     a |= 0;
@@ -123,6 +125,7 @@ export default function Grid({
 
   let positions: Map<string, Vector[]> = new Map();
 
+  //Find a list of all positions where the solution letters can be placed
   for (let i = 0; i < grid.length; i++) {
     for (let j = 0; j < grid[0].length; j++) {
       const vector = new Vector(j, i);
@@ -133,6 +136,7 @@ export default function Grid({
     }
   }
 
+  //Find a random position for each letter of the solution word
   for (let i = 0; i < escapedSolutionWord.length; i++) {
     const letter = escapedSolutionWord[i];
     const possiblePositions = positions.get(letter);

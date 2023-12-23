@@ -2,6 +2,7 @@ export interface Hashable {
   hash(): InnerHashKey;
 }
 
+// A correct hashmap since javascript somehow cant hash custom objects
 export class HashableMap<K extends Hashable, V> extends Map<K, V> {
   private readonly _innerMap: InnerMap<K, V> = new InnerMap<K, V>();
 

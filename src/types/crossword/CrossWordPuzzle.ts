@@ -1,13 +1,12 @@
 import { HashableMap } from "../HashableMap";
-import { Vector, vectorMul, vectorSub } from "./Vector";
-import { Orientation, orientationToDelta } from "./Orientation";
 import { QuestionAnswer } from "../questions/QuestionAnswer";
+import { Orientation, orientationToDelta } from "./Orientation";
+import { Vector, vectorMul, vectorSub } from "./Vector";
 
 export class CrossWordPuzzle {
   grid: HashableMap<Vector, string>;
   word_starts: HashableMap<Vector, [Orientation, number][]>;
   questions: QuestionAnswer[];
-
   sorted_questions: QuestionAnswer[];
 
   constructor(
@@ -23,6 +22,9 @@ export class CrossWordPuzzle {
     );
   }
 
+  // Tries to place a word in the grid, starting at pos_to_match, with the
+  // first letter of the word at offset from pos_to_match. Returns a tuple
+  // of [success, written_positions, start_pos].
   placeWord(
     word: string,
     orientation: Orientation,
@@ -66,6 +68,9 @@ export class CrossWordPuzzle {
     return [true, written_positions, pos_start];
   }
 
+  // Returns a list of positions that have the given letter
+  // Tries to return positions that are close to the average position of
+  // all positions with the letter
   findPositionsWithLetter(letter: string): Vector[] {
     if (this.grid.size === 0) {
       return [new Vector(0, 0)];
@@ -115,6 +120,8 @@ export class CrossWordPuzzle {
     return positions;
   }
 
+  //Converts the possibly infinite grid to a finite grid, and returns it along
+  //with the word_starts map
   toFiniteGrid(): [
     (string | null)[][],
     HashableMap<Vector, [Orientation, number][]>
@@ -154,6 +161,7 @@ export class CrossWordPuzzle {
     return [grid, word_starts];
   }
 
+  // Returns a string representation of the crossword
   toString(): string {
     const [grid, word_starts] = this.toFiniteGrid();
 
@@ -170,6 +178,9 @@ export class CrossWordPuzzle {
     return result;
   }
 
+  // Returns a deep copy of this puzzle
+  // This is needed since react somehow doesn not rerender when the puzzle
+  // is mutated
   clone(): CrossWordPuzzle {
     const new_grid = new HashableMap<Vector, string>();
     for (const [position, letter] of this.grid.entries()) {

@@ -1,5 +1,6 @@
 import { Hashable } from "../HashableMap";
 
+// Represents a 2D vector
 export class Vector implements Hashable {
   x: number;
   y: number;
