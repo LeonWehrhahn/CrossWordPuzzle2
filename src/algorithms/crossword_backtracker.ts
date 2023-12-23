@@ -1,33 +1,39 @@
-import { Orientation, orientationToDelta } from "@/types/Word";
-import { CrossWordPuzzle } from "../types/CrossWordPuzzle";
+import { Orientation, orientationToDelta } from "@/types/crossword/Orientation";
+import { CrossWordPuzzle } from "../types/crossword/CrossWordPuzzle";
 
-import { Vector, vectorSub } from "@/types/Vector";
+import { Vector, vectorSub } from "@/types/crossword/Vector";
 import { HashableMap } from "@/types/HashableMap";
+import { QuestionAnswer } from "@/types/questions/QuestionAnswer";
 
-export function* createCrossword(
-  words: string[]
+export function* crosswordIterator(
+  questions: QuestionAnswer[]
 ): IterableIterator<CrossWordPuzzle> {
+  let escaped_questions = questions.map((question) => {
+    return {
+      question: question.question,
+      answer: question.answer.toUpperCase().replace(" ", "⎵"),
+    } as QuestionAnswer;
+  });
+
   const puzzle = new CrossWordPuzzle(
     new HashableMap(),
-    [...words].sort((a, b) => b.length - a.length)
+    escaped_questions,
+    new HashableMap()
   );
 
-  const crosswords = createCrosswordHelper(puzzle, 0);
-  for (const crossword of crosswords) {
-    yield crossword;
-  }
+  yield* createCrosswordHelper(puzzle, 0);
 }
 
 function* createCrosswordHelper(
   puzzle: CrossWordPuzzle,
   index: number
 ): IterableIterator<CrossWordPuzzle> {
-  if (index === puzzle.dictionary.length) {
+  if (index === puzzle.sorted_questions.length) {
     yield puzzle;
     return;
   }
 
-  const word = puzzle.dictionary[index];
+  const word = puzzle.sorted_questions[index].answer;
 
   for (let offset = 0; offset < word.length; offset++) {
     const char = word[offset];
@@ -38,20 +44,18 @@ function* createCrosswordHelper(
         Orientation.VERTICAL,
       ]) {
         // place word
-        const [success, inserted_positions] = puzzle.placeWord(
+        const [success, inserted_positions, start_pos] = puzzle.placeWord(
           word,
           orientation,
           possible_pos,
           offset
         );
 
+        // recurse if successful
         if (success) {
-          // recurse
-          const results = createCrosswordHelper(puzzle, index + 1);
-
-          for (const result of results) {
-            yield result;
-          }
+          puzzle.word_starts.set(start_pos, [orientation, index]);
+          yield* createCrosswordHelper(puzzle, index + 1);
+          puzzle.word_starts.delete(start_pos);
         }
 
         // backtrack

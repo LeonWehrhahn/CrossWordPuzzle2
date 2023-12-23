@@ -1,4 +1,4 @@
-import { Hashable } from "./HashableMap";
+import { Hashable } from "../HashableMap";
 
 export class Vector implements Hashable {
   x: number;

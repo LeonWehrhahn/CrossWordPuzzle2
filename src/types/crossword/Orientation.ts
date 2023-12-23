@@ -13,3 +13,12 @@ export function orientationToDelta(orientation: Orientation): Vector {
       return new Vector(0, 1);
   }
 }
+
+export function orientationToString(orientation: Orientation): string {
+  switch (orientation) {
+    case Orientation.HORIZONTAL:
+      return "ᐅ";
+    case Orientation.VERTICAL:
+      return "ᐁ";
+  }
+}
