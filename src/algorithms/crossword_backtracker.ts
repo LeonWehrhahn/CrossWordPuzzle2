@@ -58,7 +58,9 @@ function* createCrosswordHelper(
             puzzle.word_starts.set(start_pos, []);
           }
 
-          puzzle.word_starts.get(start_pos)!.push([orientation, index]);
+          puzzle.word_starts
+            .get(start_pos)!
+            .push([orientation, puzzle.sorted_questions[index].presortIndex!]);
 
           yield* createCrosswordHelper(puzzle, index + 1);
 

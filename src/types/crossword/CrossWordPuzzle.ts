@@ -17,6 +17,9 @@ export class CrossWordPuzzle {
     this.grid = grid;
     this.word_starts = word_starts;
     this.questions = questions;
+    for (let i = 0; i < this.questions.length; i++) {
+      this.questions[i].presortIndex = i;
+    }
     this.sorted_questions = [...questions].sort(
       (a, b) => b.answer.length - a.answer.length
     );
