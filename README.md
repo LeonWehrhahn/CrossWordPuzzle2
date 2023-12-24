@@ -2,7 +2,7 @@
 
 ## Description
 
-This website allows you to create a crossword puzzle from a list of words. The puzzle can then be downloaded as a pdf file. It used a backtracking algorithm to generate the puzzle.
+This website allows you to create a crossword puzzle from a list of words. The puzzle can then be downloaded as a pdf file. It uses a backtracking algorithm to generate the puzzle.
 
 ![image](https://github.com/ManuelLerchner/CrossWordPuzzle/assets/54124311/e12fa33c-3279-455c-ba5d-79710b578524)
 
