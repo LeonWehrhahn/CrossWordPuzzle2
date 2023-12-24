@@ -1,5 +1,8 @@
+"usce client";
+
 import { QuestionAnswer } from "@/types/questions/QuestionAnswer";
 import React from "react";
+import { TRANSLATION_TABLE } from "../../public/TRANSLATION_TABLE";
 
 export default function EditableTable({
   questions,
@@ -8,6 +11,7 @@ export default function EditableTable({
   questions: QuestionAnswer[];
   setQuestions: React.Dispatch<React.SetStateAction<QuestionAnswer[]>>;
 }) {
+  const locale = "en";
   return (
     <table className="table table-zebra w-full mt-10 bg-white shadow-md rounded-lg border border-solid border-gray-300">
       <colgroup>
@@ -17,16 +21,22 @@ export default function EditableTable({
       </colgroup>
       <thead>
         <tr className=" text-gray-600 text-sm leading-normal">
-          <th className="border px-4 py-2">Question</th>
-          <th className="border px-4 py-2">Answer</th>
-          <th className="border px-4 py-2">Delete</th>
+          <th className="border px-4 py-2">
+            {TRANSLATION_TABLE[locale ?? "en"].question}
+          </th>
+          <th className="border px-4 py-2">
+            {TRANSLATION_TABLE[locale ?? "en"].answer}
+          </th>
+          <th className="border px-4 py-2">
+            {TRANSLATION_TABLE[locale ?? "en"].delete}
+          </th>
         </tr>
       </thead>
       <tbody>
         {questions.length === 0 && (
           <tr>
             <td colSpan={3} className="border px-4 py-2 text-center">
-              No questions yet
+              {TRANSLATION_TABLE[locale ?? "en"].noQuestionsYet}
             </td>
           </tr>
         )}
@@ -64,7 +74,7 @@ export default function EditableTable({
                   setQuestions(questions.filter((_, j) => j !== i))
                 }
               >
-                Delete
+                {TRANSLATION_TABLE[locale ?? "en"].delete}
               </button>
             </td>
           </tr>

@@ -1,5 +1,5 @@
 "use client";
-
+import { TRANSLATION_TABLE } from "../../public/TRANSLATION_TABLE";
 import CrosswordPuzzleGenerator from "@/components/CrosswordPuzzleGenerator";
 import QuestionAnswerInputBox from "@/components/QuestionAnswerInputBox";
 import Settings from "@/components/Settings";
@@ -7,6 +7,7 @@ import { QuestionAnswer } from "@/types/questions/QuestionAnswer";
 import { useState } from "react";
 
 export default function Home() {
+  const locale = "en"
   const [questions, setQuestions] = useState<QuestionAnswer[]>([
     {
       question: "What is the capital of the United States?",
@@ -49,7 +50,9 @@ export default function Home() {
 
         {questions.length === 0 && (
           <div className="my-10">
-            <h1 className="text-xl"> Please add some questions! </h1>
+            <h1 className="text-xl">
+              {TRANSLATION_TABLE[locale ?? "en"].pleaseAddQuestions}
+            </h1>
           </div>
         )}
 

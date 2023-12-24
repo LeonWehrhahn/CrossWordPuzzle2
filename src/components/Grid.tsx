@@ -6,6 +6,7 @@ import {
 } from "@/types/crossword/Orientation";
 import { Vector } from "@/types/crossword/Vector";
 import React from "react";
+import { TRANSLATION_TABLE } from "../../public/TRANSLATION_TABLE";
 
 // A seeded random number generator used for creating predictable random numbers
 function cyrb128(str: string) {
@@ -114,6 +115,7 @@ export default function Grid({
   showSolution: boolean;
   box_width: number;
 }) {
+  const locale = "en"
   const escapedSolutionWord = solutionWord.toUpperCase().replace(" ", "⎵");
   const [grid, word_starts] = crossword.toFiniteGrid();
 
@@ -152,9 +154,9 @@ export default function Grid({
       return (
         <div className="my-14">
           <h1 className="text-xl font-bold text-center ">
-            The solution word is not present in the crossword puzzle!
+            {TRANSLATION_TABLE[locale ?? "en"].solutionWordNotContained}
           </h1>
-          <p> Please try again with a different solution word. </p>
+          <p> {TRANSLATION_TABLE[locale ?? "en"].pleaseChangeSolutionWord} </p>
         </div>
       );
     }
