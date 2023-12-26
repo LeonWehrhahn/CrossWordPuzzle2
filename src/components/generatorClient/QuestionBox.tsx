@@ -1,6 +1,6 @@
 import { CrossWordPuzzle } from "@/types/crossword/CrossWordPuzzle";
 import React from "react";
-import { TRANSLATION_TABLE } from "../../public/TRANSLATION_TABLE";
+import { useGeneratorTranslations } from "@/providers/TranslationProvider";
 
 export default function QuestionBox({
   crossword,
@@ -9,7 +9,8 @@ export default function QuestionBox({
   crossword: CrossWordPuzzle;
   showSolution: boolean;
 }) {
-  const locale = "en"
+  const { dictionary } = useGeneratorTranslations();
+
   return (
     <div>
       <table className="table table-zebra w-full my-4 bg-white shadow-md rounded-lg border border-solid border-gray-300">
@@ -32,11 +33,11 @@ export default function QuestionBox({
           <tr className=" text-gray-600 text-sm leading-normal">
             <th className="border px-4 py-2 text-center">#</th>
             <th className="border px-4 py-2">
-              {TRANSLATION_TABLE[locale ?? "en"].question}
+              {dictionary.question}
             </th>
             {showSolution && (
               <th className="border px-4 py-2">
-                {TRANSLATION_TABLE[locale ?? "en"].answer}
+                {dictionary.answer}
               </th>
             )}
           </tr>

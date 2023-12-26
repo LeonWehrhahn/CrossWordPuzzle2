@@ -7,7 +7,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Grid from "./Grid";
 import QuestionBox from "./QuestionBox";
 import { useReactToPrint } from "react-to-print";
-import { TRANSLATION_TABLE } from "../../public/TRANSLATION_TABLE";
+import { useTranslation } from "@/providers/TranslationProvider";
+import { GeneratorClientTranslations } from "@/translations/TRANSLATION_TABLE";
 
 export default function CrosswordPuzzleGenerator({
   questions,
@@ -18,7 +19,7 @@ export default function CrosswordPuzzleGenerator({
   solutionWord: string;
   box_width: number;
 }) {
-  const locale = "en"
+  const { dictionary } = useTranslation<GeneratorClientTranslations>();
 
   const [currentCrossword, setCurrentCrossword] = useState<
     CrossWordPuzzle | undefined | null
@@ -59,7 +60,7 @@ export default function CrosswordPuzzleGenerator({
     <div className="flex flex-col items-center my-10 w-full">
       {currentCrossword === undefined && (
         <div>
-          <h1>{TRANSLATION_TABLE[locale ?? "en"].generatingCrossword}</h1>
+          <h1>{dictionary.generatingCrossword}</h1>
         </div>
       )}
       {currentCrossword === null && (
@@ -67,14 +68,14 @@ export default function CrosswordPuzzleGenerator({
           {atleastOneSolution && (
             <>
               <h1 className="text-xl">
-                {TRANSLATION_TABLE[locale ?? "en"].noMoreCrosswordsPossible}
+                {dictionary.noMoreCrosswordsPossible}
               </h1>
-              <> {TRANSLATION_TABLE[locale ?? "en"].tryChangingQuestions} </>
+              <> {dictionary.tryChangingQuestions} </>
             </>
           )}
           {!atleastOneSolution && (
             <h1 className="text-xl">
-              {TRANSLATION_TABLE[locale ?? "en"].noCrosswordsPossible}
+              {dictionary.noCrosswordsPossible}
             </h1>
           )}
         </div>
@@ -86,7 +87,7 @@ export default function CrosswordPuzzleGenerator({
               className="bg-green-500 hover:bg-green-600 my-4 text-white font-bold py-2 px-4 rounded-lg shadow-md"
               onClick={() => proceedToNextCrossword()}
             >
-              {TRANSLATION_TABLE[locale ?? "en"].regenerateCrossword}
+              {dictionary.regenerateCrossword}
             </button>
 
             <button
@@ -94,14 +95,14 @@ export default function CrosswordPuzzleGenerator({
               onClick={() => setShowSolution(!showSolution)}
             >
               {showSolution
-                ? TRANSLATION_TABLE[locale ?? "en"].hideSolution
-                : TRANSLATION_TABLE[locale ?? "en"].showSolution}
+                ? dictionary.hideSolution
+                : dictionary.showSolution}
             </button>
             <button
               className="bg-blue-500 hover:bg-blue-700 my-4 text-white font-bold py-2 px-4 rounded-lg shadow-md"
               onClick={handlePrint}
             >
-              {TRANSLATION_TABLE[locale ?? "en"].printCrossword}
+              {dictionary.printCrossword}
             </button>
           </div>
 

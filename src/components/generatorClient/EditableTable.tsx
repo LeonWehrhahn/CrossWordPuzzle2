@@ -2,7 +2,8 @@
 
 import { QuestionAnswer } from "@/types/questions/QuestionAnswer";
 import React from "react";
-import { TRANSLATION_TABLE } from "../../public/TRANSLATION_TABLE";
+import { useTranslation } from "@/providers/TranslationProvider";
+import { GeneratorClientTranslations } from "@/translations/TRANSLATION_TABLE";
 
 export default function EditableTable({
   questions,
@@ -11,7 +12,8 @@ export default function EditableTable({
   questions: QuestionAnswer[];
   setQuestions: React.Dispatch<React.SetStateAction<QuestionAnswer[]>>;
 }) {
-  const locale = "en";
+  const { dictionary } = useTranslation<GeneratorClientTranslations>();
+
   return (
     <table className="table table-zebra w-full mt-10 bg-white shadow-md rounded-lg border border-solid border-gray-300">
       <colgroup>
@@ -22,13 +24,13 @@ export default function EditableTable({
       <thead>
         <tr className=" text-gray-600 text-sm leading-normal">
           <th className="border px-4 py-2">
-            {TRANSLATION_TABLE[locale ?? "en"].question}
+            {dictionary.question}
           </th>
           <th className="border px-4 py-2">
-            {TRANSLATION_TABLE[locale ?? "en"].answer}
+            {dictionary.answer}
           </th>
           <th className="border px-4 py-2">
-            {TRANSLATION_TABLE[locale ?? "en"].delete}
+            {dictionary.delete}
           </th>
         </tr>
       </thead>
@@ -36,7 +38,7 @@ export default function EditableTable({
         {questions.length === 0 && (
           <tr>
             <td colSpan={3} className="border px-4 py-2 text-center">
-              {TRANSLATION_TABLE[locale ?? "en"].noQuestionsYet}
+              {dictionary.noQuestionsYet}
             </td>
           </tr>
         )}
@@ -74,7 +76,7 @@ export default function EditableTable({
                   setQuestions(questions.filter((_, j) => j !== i))
                 }
               >
-                {TRANSLATION_TABLE[locale ?? "en"].delete}
+                {dictionary.delete}
               </button>
             </td>
           </tr>

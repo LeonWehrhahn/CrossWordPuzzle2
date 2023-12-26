@@ -1,7 +1,7 @@
 import { QuestionAnswer } from "@/types/questions/QuestionAnswer";
 import React from "react";
 import EditableTable from "./EditableTable";
-import { TRANSLATION_TABLE } from "../../public/TRANSLATION_TABLE";
+import { useGeneratorTranslations } from "@/providers/TranslationProvider";
 
 export default function QuestionAnswerInputBox({
   questions,
@@ -14,7 +14,8 @@ export default function QuestionAnswerInputBox({
   solutionWord: string;
   setSolutionWord: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  const locale = "en"
+  const { dictionary } = useGeneratorTranslations();
+
   const [question, setQuestion] = React.useState("");
   const [answer, setAnswer] = React.useState("");
 
@@ -24,14 +25,14 @@ export default function QuestionAnswerInputBox({
         <input
           type="text"
           className="p-2 rounded-lg shadow-md"
-          placeholder={TRANSLATION_TABLE[locale ?? "en"].question}
+          placeholder={dictionary.question}
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
         />
         <input
           type="text"
           className="p-2 rounded-lg shadow-md"
-          placeholder={TRANSLATION_TABLE[locale ?? "en"].answer}
+          placeholder={dictionary.answer}
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
         />
@@ -39,7 +40,7 @@ export default function QuestionAnswerInputBox({
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md"
           onClick={() => {
             if (question === "" || answer === "") {
-              alert(TRANSLATION_TABLE[locale ?? "en"].pleaseFillInBothFields);
+              alert(dictionary.pleaseFillInBothFields);
               return;
             }
 
@@ -48,7 +49,7 @@ export default function QuestionAnswerInputBox({
             setAnswer("");
           }}
         >
-          {TRANSLATION_TABLE[locale ?? "en"].add}
+          {dictionary.add}
         </button>
       </div>
 
@@ -56,7 +57,7 @@ export default function QuestionAnswerInputBox({
 
       <div className="flex items-center justify-center my-4">
         <span className="mr-4 font-semibold">
-          {TRANSLATION_TABLE[locale ?? "en"].solutionWord}:{" "}
+          {dictionary.solutionWord}:{" "}
         </span>
         <input
           type="text"
