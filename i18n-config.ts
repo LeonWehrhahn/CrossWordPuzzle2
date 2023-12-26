@@ -1,6 +1,10 @@
-export const i18n = {
-  defaultLocale: "en",
-  locales: ["en", "de"],
-} as const;
+import { Config } from 'next-i18n-router/dist/types';
 
-export type Locale = (typeof i18n)["locales"][number];
+export const i18nConfig : Config = {
+  locales: ['en', 'de', 'ja'],
+  defaultLocale: 'en',
+  prefixDefault: false,
+  basePath: '/',
+};
+
+export type Locale = (typeof i18nConfig)["locales"][number];
