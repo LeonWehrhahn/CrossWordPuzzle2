@@ -5,6 +5,7 @@ import { Locale } from "../../../i18n-config";
 export default function Home({ params }: { params: { lang: Locale } }) {
 
   const translation = TRANSLATION_TABLE[params.lang];
+  console.log(translation);
 
   return (
     <div className="flex flex-col md:flex-row items-stretch gap-4 justify-between">
