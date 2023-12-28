@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.crossword-generator.com
+
+# Sitemaps
+Sitemap: https://www.crossword-generator.com/sitemap.xml
